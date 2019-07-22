@@ -27,6 +27,14 @@
 #   (int) WSGI daemon process group owner, and daemon process group
 #   Defaults to 'puppetboard' ($::puppetboard::params::group)
 #
+# [*python_home*]
+#   (string) WSGI daemon process python-home
+#   Defaults to $::puppetboard::params::python_home
+#
+# [*python_path*]
+#   (string) WSGI daemon process python-path
+#   Defaults to $::puppetboard::params::python_path
+#
 # [*basedir*]
 #   (string) Base directory where to build puppetboard vcsrepo and python virtualenv.
 #   Defaults to '/srv/puppetboard' ($::puppetboard::params::basedir)
@@ -72,6 +80,8 @@ class puppetboard::apache::conf (
   Integer $max_reqs                         = 0,
   String $user                              = $puppetboard::params::user,
   String $group                             = $puppetboard::params::group,
+  Optional[String] $python_home             = undef,
+  Optional[Array[String]] $python_path      = undef,
   Stdlib::AbsolutePath $basedir             = $puppetboard::params::basedir,
   Boolean $enable_ldap_auth                 = $puppetboard::params::enable_ldap_auth,
   Optional[String] $ldap_bind_dn            = undef,
@@ -83,6 +93,9 @@ class puppetboard::apache::conf (
 ) inherits ::puppetboard::params {
 
   $docroot = "${basedir}/puppetboard"
+  if $python_path {
+    $_python_path = join($_python_path, ":")
+  }
 
   file { "${docroot}/wsgi.py":
     ensure  => present,

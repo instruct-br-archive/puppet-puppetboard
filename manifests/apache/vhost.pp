@@ -68,7 +68,7 @@
 #   No default ($::puppetboard::params::ldap_url)
 #
 # [*ldap_bind_authoritative]
-#   (string) Determines if other authentication providers are used 
+#   (string) Determines if other authentication providers are used
 #            when a user can be mapped to a DN but the server cannot bind with the credentials
 #   No default ($::puppetboard::params::ldap_bind_authoritative)
 #
@@ -89,6 +89,8 @@ class puppetboard::apache::vhost (
   Integer $threads                          = 5,
   String $user                              = $puppetboard::params::user,
   String $group                             = $puppetboard::params::group,
+  Optional[String] $python_home             = undef,
+  Optional[Array[String]] $python_path      = undef,
   Stdlib::AbsolutePath $basedir             = $puppetboard::params::basedir,
   String $override                          = $puppetboard::params::apache_override,
   Boolean $enable_ldap_auth                 = $puppetboard::params::enable_ldap_auth,
@@ -102,15 +104,28 @@ class puppetboard::apache::vhost (
 ) inherits ::puppetboard::params {
 
   $docroot = "${basedir}/puppetboard"
+  if $python_path {
+    $_python_path = join($python_path, ":")
+  }
 
   $wsgi_script_aliases = {
     "${wsgi_alias}" => "${docroot}/wsgi.py",
   }
 
-  $wsgi_daemon_process_options = {
-    threads => $threads,
-    group   => $group,
-    user    => $user,
+  if $python_home and $python_path {
+    $wsgi_daemon_process_options = {
+      threads     => $threads,
+      group       => $group,
+      user        => $user,
+      python-path => $python_path,
+      python-home => $python_home,
+    }
+  } else {
+    $wsgi_daemon_process_options = {
+      threads     => $threads,
+      group       => $group,
+      user        => $user,
+    }
   }
 
   file { "${docroot}/wsgi.py":

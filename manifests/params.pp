@@ -51,6 +51,7 @@ class puppetboard::params {
   $localise_timestamp = true
   $offline_mode = false
   $python_loglevel = 'info'
+  $python_version = 'system'
   $reports_count = 10
   $experimental = false
   $virtualenv = 'python-virtualenv'
