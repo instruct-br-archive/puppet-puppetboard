@@ -105,7 +105,7 @@ class puppetboard::apache::vhost (
 
   $docroot = "${basedir}/puppetboard"
   if $python_path {
-    $_python_path = join($python_path, ":")
+    $python_path_conf = join($python_path, ":")
   }
 
   $wsgi_script_aliases = {
@@ -117,7 +117,7 @@ class puppetboard::apache::vhost (
       threads     => $threads,
       group       => $group,
       user        => $user,
-      python-path => $python_path,
+      python-path => $python_path_conf,
       python-home => $python_home,
     }
   } else {
