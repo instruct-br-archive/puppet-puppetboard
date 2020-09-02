@@ -7,6 +7,15 @@
 [![Puppet Forge - endorsement](https://img.shields.io/puppetforge/e/puppet/puppetboard.svg)](https://forge.puppetlabs.com/puppet/puppetboard)
 [![Puppet Forge score](https://img.shields.io/puppetforge/f/puppet/puppetboard.svg)](https://forge.puppetlabs.com/puppet/puppetboard)
 
+---
+
+## ALERT :warning:
+
+This repository is **unmaintained**. This fork was made when the mainstream repository did not support running Puppetboard with Python 3.
+The mainstream repo now supports it and should be preferred.
+
+---
+
 #### Table of Contents
 
 1. [Overview](#overview)
